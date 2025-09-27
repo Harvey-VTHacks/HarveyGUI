@@ -34,8 +34,8 @@ class Ui_MainWindow(object):
 "QToolButton:pressed {\n"
 "}")
         icon = QIcon()
-        icon.addFile(u"../../../../Downloads/muted-removebg-preview (1).png", QSize(), QIcon.Normal, QIcon.Off)
-        icon.addFile(u"../../../../Downloads/microphone.png", QSize(), QIcon.Normal, QIcon.On)
+        icon.addFile(u"muted.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"microphone.png", QSize(), QIcon.Normal, QIcon.On)
         self.toolButton.setIcon(icon)
         self.toolButton.setIconSize(QSize(200, 200))
         # Make the button checkable so it can toggle between On/Off states
