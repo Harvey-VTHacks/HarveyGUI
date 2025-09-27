@@ -11,15 +11,36 @@
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
+import os
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        # Load custom font from fonts directory
+        font_path = os.path.join(os.path.dirname(__file__), "fonts", "LexendDeca-VariableFont_wght.ttf")
+        if os.path.exists(font_path):
+            font_id = QFontDatabase.addApplicationFont(font_path)
+            if font_id != -1:
+                font_families = QFontDatabase.applicationFontFamilies(font_id)
+                if font_families:
+                    self.lexend_font_family = font_families[0]
+                    print(f"Loaded font: {self.lexend_font_family}")
+                else:
+                    self.lexend_font_family = "Calibri"  # Fallback
+                    print("Font loaded but no families found, using Calibri")
+            else:
+                self.lexend_font_family = "Calibri"  # Fallback
+                print("Failed to load font, using Calibri")
+        else:
+            self.lexend_font_family = "Calibri"  # Fallback
+            print(f"Font file not found at: {font_path}, using Calibri")
+
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.setAutoFillBackground(False)
         MainWindow.setStyleSheet(u"")
         self.centralwidget = QWidget(MainWindow)
+        MainWindow.resize(1000, 600)
         self.centralwidget.setObjectName(u"centralwidget")
         self.toolButton = QToolButton(self.centralwidget)
         self.toolButton.setObjectName(u"toolButton")
@@ -34,7 +55,7 @@ class Ui_MainWindow(object):
 "QToolButton:pressed {\n"
 "}")
         icon = QIcon()
-        icon.addFile(u"muted.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"stars.png", QSize(), QIcon.Normal, QIcon.Off)
         icon.addFile(u"microphone.png", QSize(), QIcon.Normal, QIcon.On)
         self.toolButton.setIcon(icon)
         self.toolButton.setIconSize(QSize(200, 200))
@@ -44,16 +65,18 @@ class Ui_MainWindow(object):
 
         self.label = QLabel(self.centralwidget)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(200, 100, 600, 40))  # Wider and centered, moved up
+        self.label.setGeometry(QRect(50, 60, 900, 100))  # Much wider (50-950) and taller for wrapping
         self.label.setAlignment(Qt.AlignCenter)
-        self.label_2 = QLabel(self.centralwidget)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(200, 450, 600, 40))  # Wider and centered, below button
-        self.label_2.setAlignment(Qt.AlignCenter)
+        self.label.setWordWrap(True)  # Enable text wrapping
+        # Set Lexend Deca font for main label
+        font = QFont()
+        font.setFamily(self.lexend_font_family)
+        font.setPointSize(14)
+        self.label.setFont(font)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1000, 22))  # Match window width
+        self.menubar.setGeometry(QRect(0, 0, 2500, 22))  # Match window width
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -69,14 +92,7 @@ class Ui_MainWindow(object):
         self.toolButton.setText("")
         self.label.setText(QCoreApplication.translate("MainWindow", u"I'm Harvey, your personal digital assistant. How can I help you today?", None))
         self.label.setStyleSheet("color: #333333;"             
-            "font-size: 22px;"
+            "font-size: 24px;"
             "font-weight: bold;"
             "qproperty-alignment: AlignCenter;"
             "padding: 10px;")
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Click on the microphone button and start speaking.", None))
-
-        self.label_2.setStyleSheet("color: #007bff;"
-            "font-size: 18px;"
-            "font-weight: italic;"
-            "qproperty-alignment: AlignCenter;"
-            "margin-top: 15px;")

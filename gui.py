@@ -1,9 +1,9 @@
 # gui.py - Main application to run the UI
 import sys
-from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
 from PySide2.QtGui import QIcon
-from PySide2.QtCore import QSize
-from HarveyGUI.ui_mic import Ui_MainWindow
+from PySide2.QtCore import QSize, Qt
+from ui_mic import Ui_MainWindow
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -13,11 +13,6 @@ class MainWindow(QMainWindow):
         
         # Track microphone state (False = Off/Muted, True = On/Recording)
         self.mic_active = False
-
-        # Option 2: Auto-resize to fit content properly
-        self.adjustSize()  # Automatically adjust to fit all widgets
-
-        self.showMaximized()  # Uncomment to start maximized
         
         # Make the button checkable so it can toggle between On/Off states
         self.ui.toolButton.setCheckable(True)
@@ -31,6 +26,8 @@ class MainWindow(QMainWindow):
         
     def on_mic_clicked(self):
         """Handle microphone button click - toggle between states"""
+        print(f"Microphone button clicked! Current state: {self.mic_active}")
+        
         # Toggle the microphone state
         self.mic_active = not self.mic_active
         
@@ -38,7 +35,6 @@ class MainWindow(QMainWindow):
             # Microphone is now ON (recording)
             print("Microphone activated - Recording...")
             self.ui.toolButton.setChecked(True)  # This switches to the "On" icon
-            self.ui.label_2.setText("Harvey is listening...")
             
             # Add your voice recording/recognition logic here
             self.start_recording()
@@ -47,7 +43,6 @@ class MainWindow(QMainWindow):
             # Microphone is now OFF (muted)
             print("Microphone deactivated - Stopped recording")
             self.ui.toolButton.setChecked(False)  # This switches to the "Off" icon  
-            self.ui.label_2.setText("Click on the microphone button and start speaking.")
             
             # Stop recording logic here
             self.stop_recording()
